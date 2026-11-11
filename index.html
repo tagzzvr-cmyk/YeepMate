@@ -228,7 +228,25 @@ button{font:inherit;cursor:pointer;border:1px solid #56524c;border-radius:8px;pa
  document.getElementById('botLevel').addEventListener('change',e=>{botLevel=Number(e.target.value);botThinking=false;game.reset();selected=null;legal=[];last=null;render();});
  document.getElementById('newGame').addEventListener('click',()=>{game.reset();selected=null;legal=[];last=null;botThinking=false;render();});
  document.getElementById('undo').addEventListener('click',()=>{if(botThinking)return;const count=game.history().length; if(botLevel&&count>=2){game.undo();game.undo();}else game.undo();last=null;selected=null;legal=[];render();});
+ window.yeepMateSetLivePlayer=(assignedColor,id,whiteId,blackId)=>{
+  botLevel=0;window.yeepMateLivePlayerColor=assignedColor;window.yeepMatePlayerId=id;
+  window.yeepMateWhitePlayerId=whiteId;window.yeepMateBlackPlayerId=blackId;
+ };
+ window.yeepMateApplyRemoteMoves=(moves)=>{
+  const before=game.history().join('|'),after=(moves||[]).join('|');
+  if(before===after)return;
+  game.reset();(moves||[]).forEach(san=>game.move(san));
+  const hist=game.history({verbose:true});
+  last=hist.length?{from:hist[hist.length-1].from,to:hist[hist.length-1].to}:null;
+  selected=null;legal=[];render();
+ };
+ window.yeepMateCanMove=()=>{
+  return !!window.yeepMateLivePlayerColor &&
+   ((game.turn()==='w'&&window.yeepMateWhitePlayerId===window.yeepMatePlayerId)||
+    (game.turn()==='b'&&window.yeepMateBlackPlayerId===window.yeepMatePlayerId));
+ };
  render();
 })();
 </script>
+<script src="live.js"></script>
 </body></html>
