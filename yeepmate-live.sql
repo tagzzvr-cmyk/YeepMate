@@ -35,53 +35,104 @@ revoke all on public.yeepmate_queue from anon, authenticated;
 revoke insert, update, delete on public.yeepmate_matches from anon, authenticated;
 
 create or replace function public.yeepmate_join_queue(p_player_id text, p_player_name text)
-returns jsonb language plpgsql security definer set search_path = public
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
 as $$
-declare waiting public.yeepmate_queue%rowtype; new_match public.yeepmate_matches%rowtype;
+declare
+  waiting public.yeepmate_queue%rowtype;
+  new_match public.yeepmate_matches%rowtype;
 begin
-  if length(coalesce(p_player_id,'')) < 8 or length(p_player_id) > 80 then raise exception 'Invalid player id'; end if;
-  if length(coalesce(p_player_name,'')) < 1 or length(p_player_name) > 24 then raise exception 'Invalid player name'; end if;
+  if length(coalesce(p_player_id,'')) < 8 or length(p_player_id) > 80 then
+    raise exception 'Invalid player id';
+  end if;
+  if length(coalesce(p_player_name,'')) < 1 or length(p_player_name) > 24 then
+    raise exception 'Invalid player name';
+  end if;
 
-  delete from public.yeepmate_queue where created_at < now() - interval '3 minutes';
+  -- Serialize queue joins so two simultaneous players cannot miss each other.
+  perform pg_advisory_xact_lock(hashtext('yeepmate_matchmaking_queue'));
 
-  -- Let the first queued player discover the match created by the second player.
-  select * into new_match from public.yeepmate_matches
-  where status = 'active' and (white_player_id = p_player_id or black_player_id = p_player_id)
-  order by created_at desc limit 1;
+  delete from public.yeepmate_queue
+  where created_at < now() - interval '3 minutes';
+
+  -- If this player was already matched, return the complete match details.
+  select * into new_match
+  from public.yeepmate_matches
+  where status = 'active'
+    and (white_player_id = p_player_id or black_player_id = p_player_id)
+  order by created_at desc
+  limit 1;
+
   if new_match.id is not null then
     if new_match.white_player_id = p_player_id then
-      return jsonb_build_object('state','matched','match_id',new_match.id,'color','white',
-        'opponent_id',new_match.black_player_id,'opponent_name',new_match.black_name,
-        'white_player_id',new_match.white_player_id,'black_player_id',new_match.black_player_id);
+      return jsonb_build_object(
+        'state','matched',
+        'match_id',new_match.id,
+        'color','white',
+        'opponent_id',new_match.black_player_id,
+        'opponent_name',new_match.black_name,
+        'white_player_id',new_match.white_player_id,
+        'black_player_id',new_match.black_player_id
+      );
     else
-      return jsonb_build_object('state','matched','match_id',new_match.id,'color','black',
-        'opponent_id',new_match.white_player_id,'opponent_name',new_match.white_name,
-        'white_player_id',new_match.white_player_id,'black_player_id',new_match.black_player_id);
+      return jsonb_build_object(
+        'state','matched',
+        'match_id',new_match.id,
+        'color','black',
+        'opponent_id',new_match.white_player_id,
+        'opponent_name',new_match.white_name,
+        'white_player_id',new_match.white_player_id,
+        'black_player_id',new_match.black_player_id
+      );
     end if;
   end if;
 
-  select * into waiting from public.yeepmate_queue
-  where player_id <> p_player_id order by created_at
-  for update skip locked limit 1;
+  -- Avoid duplicate queue entries for this player.
+  delete from public.yeepmate_queue where player_id = p_player_id;
+
+  select * into waiting
+  from public.yeepmate_queue
+  where player_id <> p_player_id
+  order by created_at
+  limit 1;
 
   if waiting.player_id is not null then
     delete from public.yeepmate_queue where player_id = waiting.player_id;
-    insert into public.yeepmate_matches
-      (white_player_id, black_player_id, white_name, black_name, fen, moves, turn_player_id)
-    values (waiting.player_id, p_player_id, waiting.player_name, p_player_name,
-      'start', '[]'::jsonb, waiting.player_id)
+
+    insert into public.yeepmate_matches (
+      white_player_id, black_player_id,
+      white_name, black_name,
+      fen, moves, turn_player_id
+    )
+    values (
+      waiting.player_id, p_player_id,
+      waiting.player_name, p_player_name,
+      'start', '[]'::jsonb, waiting.player_id
+    )
     returning * into new_match;
 
-    return jsonb_build_object('state','matched','match_id',new_match.id,'color','black',
-      'opponent_id',waiting.player_id,'opponent_name',waiting.player_name,
-      'white_player_id',new_match.white_player_id,'black_player_id',new_match.black_player_id);
+    return jsonb_build_object(
+      'state','matched',
+      'match_id',new_match.id,
+      'color','black',
+      'opponent_id',waiting.player_id,
+      'opponent_name',waiting.player_name,
+      'white_player_id',new_match.white_player_id,
+      'black_player_id',new_match.black_player_id
+    );
   end if;
 
   insert into public.yeepmate_queue(player_id, player_name)
-  values (p_player_id, p_player_name) on conflict (player_id) do nothing;
+  values (p_player_id, p_player_name);
+
   return jsonb_build_object('state','waiting');
 end;
 $$;
+
+revoke all on function public.yeepmate_join_queue(text,text) from public;
+grant execute on function public.yeepmate_join_queue(text,text) to anon, authenticated;
 
 create or replace function public.yeepmate_leave_queue(p_player_id text)
 returns boolean language plpgsql security definer set search_path = public
