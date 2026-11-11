@@ -40,7 +40,7 @@ main{max-width:1180px;margin:12px auto 48px;padding:0 22px;display:grid;grid-tem
   boardEl.innerHTML='';
   for(let r=7;r>=0;r--)for(let c=0;c<8;c++){
    const sq=files[c]+(r+1),p=game.get(sq),el=document.createElement('button');
-   el.type='button';el.className='square '+((r+c)%2===0?'light':'dark');
+   el.type='button';el.className='square '+((r+c)%2===1?'light':'dark');
    if(selected===sq)el.classList.add('selected');
    if(last&&(last.from===sq||last.to===sq))el.classList.add('last');
    const target=legal.find(m=>m.to===sq);if(target)el.classList.add(p?'capture':'legal');
