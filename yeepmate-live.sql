@@ -44,6 +44,22 @@ begin
 
   delete from public.yeepmate_queue where created_at < now() - interval '3 minutes';
 
+  -- Let the first queued player discover the match created by the second player.
+  select * into new_match from public.yeepmate_matches
+  where status = 'active' and (white_player_id = p_player_id or black_player_id = p_player_id)
+  order by created_at desc limit 1;
+  if new_match.id is not null then
+    if new_match.white_player_id = p_player_id then
+      return jsonb_build_object('state','matched','match_id',new_match.id,'color','white',
+        'opponent_id',new_match.black_player_id,'opponent_name',new_match.black_name,
+        'white_player_id',new_match.white_player_id,'black_player_id',new_match.black_player_id);
+    else
+      return jsonb_build_object('state','matched','match_id',new_match.id,'color','black',
+        'opponent_id',new_match.white_player_id,'opponent_name',new_match.white_name,
+        'white_player_id',new_match.white_player_id,'black_player_id',new_match.black_player_id);
+    end if;
+  end if;
+
   select * into waiting from public.yeepmate_queue
   where player_id <> p_player_id order by created_at
   for update skip locked limit 1;
