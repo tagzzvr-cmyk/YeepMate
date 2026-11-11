@@ -24,32 +24,65 @@ button{font:inherit;cursor:pointer;border:1px solid #56524c;border-radius:8px;pa
 .welcome-copy{padding-top:34px;position:relative;z-index:1}.eyebrow{font-size:10px;letter-spacing:2px;color:#a3d160;font-weight:900;margin:0 0 14px}.welcome h2{font-size:clamp(34px,5vw,55px);line-height:1.05;letter-spacing:-1.8px;margin:0 0 16px;font-weight:900}.welcome h2 span{color:#a3d160}.welcome-desc{max-width:470px;color:#b9b5ad;font-size:14px;line-height:1.8;margin:0 0 27px}.welcome label{display:block;color:#c9c5bd;font-size:10px;font-weight:900;letter-spacing:1.2px;margin-bottom:8px}.welcome select{width:min(100%,390px);padding:14px 15px;border:1px solid #56524c;border-radius:9px;background:#302e2b;color:#f2f0eb;font:inherit;font-size:13px;font-weight:750}.welcome-play{display:flex;align-items:center;justify-content:space-between;width:min(100%,390px);margin-top:12px;padding:15px 17px;font-size:14px}.welcome-play span{font-size:20px}.welcome-note{margin-top:16px;color:#918c83;font-size:11px}.welcome-art{height:330px;display:grid;place-items:center;position:relative}.art-glow{position:absolute;width:270px;height:270px;border-radius:50%;background:#81b64c18;box-shadow:0 0 100px #81b64c20}.art-piece{position:relative;font-family:Georgia,serif;font-size:clamp(170px,24vw,260px);line-height:1;color:#e7e5dd;text-shadow:0 12px 0 #62645b,0 25px 35px #0009;transform:translateY(-10px)}.art-caption{position:absolute;bottom:8px;font-size:10px;letter-spacing:4px;color:#9e9a90;font-weight:900}
 @media(max-width:760px){.welcome{margin:18px 12px 35px;padding:72px 24px 28px;grid-template-columns:1fr;gap:0;min-height:auto}.welcome-art{height:150px;grid-row:1}.art-piece{font-size:125px}.art-glow{width:145px;height:145px}.art-caption{bottom:0}.welcome-copy{padding-top:22px}.welcome h2{font-size:38px}}
 
+
+.home-screen{max-width:1120px;margin:0 auto;padding:14px 28px 180px}
+.home-top{display:flex;align-items:center;justify-content:space-between;margin:8px 0 24px}
+.home-profile{display:flex;align-items:center;gap:12px}.profile-piece{width:54px;height:54px;border-radius:13px;background:#eeeedd;color:#393832;display:grid;place-items:center;font-size:34px;box-shadow:0 3px 0 #0003}.home-profile strong,.home-profile small{display:block}.home-profile strong{font-size:17px}.home-profile small{font-size:12px;color:var(--muted);margin-top:3px}.home-top-icons{display:flex;gap:20px;font-size:25px;color:#d9d7ce}
+.home-feature-row{display:grid;grid-template-columns:1.6fr .9fr;gap:16px}
+.feature-card{min-height:245px;border-radius:18px;position:relative;overflow:hidden;padding:25px;background:linear-gradient(130deg,#1e3b25,#314d2b 65%,#526f38);border:1px solid #4b6340;box-shadow:0 12px 30px #0004}
+.feature-main{display:flex;align-items:center}.feature-content{position:relative;z-index:2;max-width:62%}.mini-label{font-size:10px;letter-spacing:1.8px;font-weight:900;color:#c3e59b}.feature-content h2{font-size:clamp(30px,4vw,43px);line-height:1.04;margin:12px 0;font-weight:950;letter-spacing:-1px}.feature-content p,.feature-side p{font-size:12px;line-height:1.6;color:#d0d9c9;max-width:290px}.feature-art{position:absolute;right:0;top:0;width:46%;height:100%;display:grid;place-items:center;background:radial-gradient(circle at 60% 50%,#9cc96a55,transparent 62%)}.feature-glow{position:absolute;width:190px;height:190px;border-radius:50%;background:#9fce6930;box-shadow:0 0 65px #9fce6940}.feature-king{position:absolute;font-size:160px;color:#e9eadf;text-shadow:0 10px 0 #777d68,0 20px 30px #0009;transform:translate(10px,-8px)}.feature-pawn{position:absolute;font-size:68px;color:#a4d26a;transform:translate(76px,64px);text-shadow:0 5px 10px #0008}
+.feature-side{background:linear-gradient(145deg,#393735,#292825);display:flex;flex-direction:column;justify-content:center}.daily-icon{font-size:48px;margin-bottom:10px;color:#a5d36c}.feature-side h3{font-size:20px;margin:10px 0 0}.feature-side p{margin-bottom:0}
+.home-section{margin-top:30px}.section-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}.section-heading h3{font-size:18px;margin:0;font-weight:850}.section-heading span{font-size:11px;color:var(--muted);font-weight:700}
+.recommend-card{display:flex;align-items:center;gap:16px;padding:14px;border-radius:13px;background:linear-gradient(120deg,#3c3a37,#302e2b);border:1px solid #4d4943}.recommend-avatar{width:80px;height:80px;flex-shrink:0;border-radius:10px;background:repeating-conic-gradient(#eeeed2 0% 25%,#769656 0% 50%) 50%/32px 32px;display:grid;place-items:center;font-size:52px;color:#f8f8f2;text-shadow:1px 2px 3px #222}.recommend-copy{display:flex;flex-direction:column;gap:5px;min-width:0}.recommend-copy strong{font-size:16px}.recommend-copy small{font-size:11px;color:var(--muted)}.recommend-copy span{font-size:10px;letter-spacing:1px;font-weight:900;color:#91c85a;background:#34432a;padding:5px 8px;border-radius:5px;align-self:flex-start;margin-top:3px}.recommend-mark{margin-left:auto;font-size:34px;color:#a3d160;padding:0 12px}
+.mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}.mode-card{min-height:118px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:5px;text-align:left;background:linear-gradient(145deg,#403e3a,#302e2b);border:1px solid #514d47;border-radius:12px;padding:15px}.mode-card:hover{border-color:#91c653;background:#41463a}.mode-icon{font-size:27px;margin-bottom:3px}.mode-card strong{font-size:13px}.mode-card small{font-size:10px;color:var(--muted)}
+.friends-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.friend-tile{min-height:105px;background:linear-gradient(145deg,#3c3a37,#302e2b);border:1px solid #4d4943;border-radius:13px;padding:14px;display:flex;flex-direction:column;gap:5px}.friend-tile span{font-size:26px;color:#a3d160}.friend-tile strong{font-size:12px}.friend-tile small{font-size:10px;color:var(--muted)}
+.home-playbar{position:fixed;z-index:10;bottom:0;left:0;right:0;padding:12px max(18px,calc((100vw - 1064px)/2)) 10px;background:linear-gradient(180deg,#302e2b00,#302e2bf2 17%,#302e2b 100%);backdrop-filter:blur(8px)}
+.home-play{width:100%;min-height:65px;border-radius:13px;font-size:22px;display:flex;align-items:center;justify-content:center;position:relative}.home-play span{position:absolute;right:22px;font-size:25px}
+.home-nav{display:flex;justify-content:space-around;padding:12px 0 2px;color:#aaa69f}.home-nav span{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;font-weight:800}.home-nav b{font-size:21px}.home-nav .active{color:#fff}.sr-select{position:absolute;left:-9999px;width:1px;height:1px}
+@media(max-width:700px){header{padding:14px 16px}.status{display:none}.home-screen{padding:8px 15px 180px}.home-feature-row{grid-template-columns:1fr}.feature-main{min-height:220px}.feature-side{min-height:145px}.feature-content{max-width:65%}.feature-art{width:43%}.feature-king{font-size:130px}.feature-pawn{font-size:52px}.mode-grid{grid-template-columns:repeat(2,1fr)}.friends-row{grid-template-columns:repeat(3,minmax(130px,1fr));overflow-x:auto}.friend-tile{min-width:130px}.home-section{margin-top:25px}.recommend-avatar{width:65px;height:65px}.recommend-mark{font-size:26px;padding:0 4px}.home-playbar{padding:10px 15px 8px}}
+@media(max-width:390px){.feature-card{padding:19px}.feature-content h2{font-size:31px}.feature-content p{font-size:11px}.home-profile strong{font-size:15px}}
+
 </style>
 </head>
 <body>
 <header><div class="brand"><div class="logo">♞</div><div><h1>YEЕPMATE</h1><p>CLASSIC CHESS</p></div></div><div class="status" id="modeStatus">♟ &nbsp; TWO-PLAYER CHESS</div></header>
 
-<section id="welcome" class="welcome">
- <div class="welcome-top"><span class="welcome-mark">♞</span><span class="welcome-tag">YEEPMATE CHESS</span></div>
- <div class="welcome-copy">
-  <p class="eyebrow">YOUR NEXT MATCH STARTS HERE</p>
-  <h2>Welcome to <span>YeepMate.</span></h2>
-  <p class="welcome-desc">A classic game of chess, made for the Yeeps community. Pick an opponent, make your moves, and see if you can claim the win.</p>
-  <label for="welcomeOpponent">CHOOSE YOUR GAME</label>
-  <select id="welcomeOpponent">
-   <option value="0">Play with a friend · Two-player</option>
-   <option value="100">Beginner Bot · 100 ELO</option>
-   <option value="400">Rookie Bot · 400 ELO</option>
-   <option value="700">Club Bot · 700 ELO</option>
-   <option value="1000">Skilled Bot · 1000 ELO</option>
-   <option value="1500">Master Bot · 1500 ELO</option>
-  </select>
-  <button class="primary welcome-play" id="startGame">Start playing <span>→</span></button>
-  <div class="welcome-note">♟ White moves first · Standard chess rules</div>
+<section id="welcome" class="home-screen">
+ <div class="home-top">
+  <div class="home-profile"><div class="profile-piece">♟</div><div><strong>Welcome back!</strong><small>Ready for a match?</small></div></div>
+  <div class="home-top-icons"><span title="YeepMate">♞</span><span title="Chess friends">♟♟</span></div>
  </div>
- <div class="welcome-art" aria-hidden="true"><div class="art-glow"></div><div class="art-piece">♞</div><div class="art-caption">MAKE YOUR MOVE</div></div>
+ <div class="home-feature-row">
+  <article class="feature-card feature-main">
+   <div class="feature-art"><span class="feature-glow"></span><span class="feature-king">♛</span><span class="feature-pawn">♟</span></div>
+   <div class="feature-content"><span class="mini-label">YEEPMATE CHESS</span><h2>Make your<br>next move.</h2><p>Play a classic chess match against a friend or one of five bots.</p></div>
+  </article>
+  <article class="feature-card feature-side">
+   <div class="daily-icon">♙</div><span class="mini-label">PICK YOUR CHALLENGE</span><h3>Choose your opponent</h3><p>From a beginner to a 1500 ELO bot.</p>
+  </article>
+ </div>
+ <section class="home-section">
+  <div class="section-heading"><h3>Recommended Match</h3><span>♟</span></div>
+  <div class="recommend-card"><div class="recommend-avatar">♔</div><div class="recommend-copy"><strong>Classic Chess</strong><small>Standard rules · White moves first</small><span>READY TO PLAY</span></div><div class="recommend-mark">♜</div></div>
+ </section>
+ <section class="home-section">
+  <div class="section-heading"><h3>Game Modes</h3><span>Choose one</span></div>
+  <div class="mode-grid">
+   <button class="mode-card" data-level="0"><span class="mode-icon">♟</span><strong>Two Player</strong><small>Play with a friend</small></button>
+   <button class="mode-card" data-level="100"><span class="mode-icon">🌱</span><strong>Beginner</strong><small>100 ELO · Easy</small></button>
+   <button class="mode-card" data-level="400"><span class="mode-icon">⚔</span><strong>Rookie</strong><small>400 ELO · Casual</small></button>
+   <button class="mode-card" data-level="700"><span class="mode-icon">♞</span><strong>Club</strong><small>700 ELO · Medium</small></button>
+   <button class="mode-card" data-level="1000"><span class="mode-icon">🏆</span><strong>Skilled</strong><small>1000 ELO · Hard</small></button>
+   <button class="mode-card" data-level="1500"><span class="mode-icon">👑</span><strong>Master</strong><small>1500 ELO · Expert</small></button>
+  </div>
+ </section>
+ <section class="home-section home-friends">
+  <div class="section-heading"><h3>Play Your Way</h3></div>
+  <div class="friends-row"><div class="friend-tile"><span>♙</span><strong>Learn chess</strong><small>Practice legal moves</small></div><div class="friend-tile"><span>♘</span><strong>Challenge yourself</strong><small>Try a harder bot</small></div><div class="friend-tile"><span>♕</span><strong>Play again</strong><small>Start a fresh match</small></div></div>
+ </section>
+ <div class="home-playbar"><button class="primary home-play" id="startGame">Play <span>→</span></button><div class="home-nav"><span class="active"><b>♟</b>Home</span><span><b>♞</b>Play</span><span><b>♜</b>Learn</span><span><b>☰</b>More</span></div></div>
+ <select id="welcomeOpponent" class="sr-select" aria-label="Choose opponent"><option value="0">Two Player</option><option value="100">Beginner Bot</option><option value="400">Rookie Bot</option><option value="700">Club Bot</option><option value="1000">Skilled Bot</option><option value="1500">Master Bot</option></select>
 </section>
-
 <main id="gameArea" style="display:none">
 <section class="board-card">
  <div class="players"><div class="player"><div class="avatar black-avatar">♚</div><div><strong id="blackName">BLACK TEAM</strong><small id="blackSub">Player 2</small></div></div><div class="turn" id="turnPill">WHITE TO MOVE</div></div>
@@ -176,6 +209,7 @@ button{font:inherit;cursor:pointer;border:1px solid #56524c;border-radius:8px;pa
   }
   movesEl.scrollTop=movesEl.scrollHeight;
  }
+ document.querySelectorAll('.mode-card').forEach(card=>card.addEventListener('click',()=>{document.getElementById('welcomeOpponent').value=card.dataset.level;document.querySelectorAll('.mode-card').forEach(x=>x.classList.remove('chosen'));card.classList.add('chosen');}));
  document.getElementById('startGame').addEventListener('click',()=>{botLevel=Number(document.getElementById('welcomeOpponent').value);document.getElementById('botLevel').value=String(botLevel);game.reset();selected=null;legal=[];last=null;botThinking=false;document.getElementById('welcome').style.display='none';document.getElementById('gameArea').style.display='grid';render();});
  document.getElementById('botLevel').addEventListener('change',e=>{botLevel=Number(e.target.value);botThinking=false;game.reset();selected=null;legal=[];last=null;render();});
  document.getElementById('newGame').addEventListener('click',()=>{game.reset();selected=null;legal=[];last=null;botThinking=false;render();});
