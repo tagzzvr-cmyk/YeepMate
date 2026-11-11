@@ -21,7 +21,7 @@ button{font:inherit;cursor:pointer;border:1px solid #56524c;border-radius:8px;pa
 </style>
 </head>
 <body>
-<header><div class="brand"><div class="logo">♞</div><div><h1>YEЕPMATE</h1><p>CLASSIC CHESS</p></div></div><div class="status">♟ &nbsp; TWO-PLAYER CHESS</div></header>
+<header><div class="brand"><div class="logo">♞</div><div><h1>YEЕPMATE</h1><p>CLASSIC CHESS</p></div></div><div class="status" id="modeStatus">♟ &nbsp; TWO-PLAYER CHESS</div></header>
 <main>
 <section class="board-card">
  <div class="players"><div class="player"><div class="avatar black-avatar">♚</div><div><strong id="blackName">BLACK TEAM</strong><small id="blackSub">Player 2</small></div></div><div class="turn" id="turnPill">WHITE TO MOVE</div></div>
@@ -57,6 +57,7 @@ button{font:inherit;cursor:pointer;border:1px solid #56524c;border-radius:8px;pa
    el.setAttribute('aria-label',sq+(p?' '+p.color+' '+p.type:' empty'));el.addEventListener('click',()=>tap(sq));boardEl.append(el);
   }
   const white=game.turn()==='w';document.getElementById('turnPill').textContent=botThinking?'BOT THINKING…':white?'WHITE TO MOVE':'BLACK TO MOVE';
+  document.getElementById('modeStatus').textContent=botLevel?'♟  VS COMPUTER':'♟  TWO-PLAYER CHESS';
   document.getElementById('blackName').textContent=botLevel?'BOT · '+botLevel+' ELO':'BLACK TEAM';
   document.getElementById('blackSub').textContent=botLevel?'Computer opponent':'Player 2';
   document.getElementById('whiteSub').textContent=botLevel?'You · Moves first':'Player 1 · Moves first';
