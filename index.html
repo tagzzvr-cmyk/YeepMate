@@ -24,13 +24,13 @@ button{font:inherit;cursor:pointer;border:1px solid #56524c;border-radius:8px;pa
 <header><div class="brand"><div class="logo">♞</div><div><h1>YEЕPMATE</h1><p>CLASSIC CHESS</p></div></div><div class="status">♟ &nbsp; TWO-PLAYER CHESS</div></header>
 <main>
 <section class="board-card">
- <div class="players"><div class="player"><div class="avatar black-avatar">♚</div><div><strong>BLACK TEAM</strong><small>Player 2</small></div></div><div class="turn" id="turnPill">WHITE TO MOVE</div></div>
+ <div class="players"><div class="player"><div class="avatar black-avatar">♚</div><div><strong id="blackName">BLACK TEAM</strong><small id="blackSub">Player 2</small></div></div><div class="turn" id="turnPill">WHITE TO MOVE</div></div>
  <div class="board-wrap"><div class="board" id="board" aria-label="Chess board"></div></div>
  <div class="board-footer"><span> A  B  C  D  E  F  G  H</span><span>YEЕPMATE · V1</span></div>
- <div class="players" style="margin:13px 2px 0"><div class="player"><div class="avatar white-avatar">♔</div><div><strong>WHITE TEAM</strong><small>Player 1 · Moves first</small></div></div><span style="font-size:11px;color:var(--muted)">Take turns on one device</span></div>
+ <div class="players" style="margin:13px 2px 0"><div class="player"><div class="avatar white-avatar">♔</div><div><strong>WHITE TEAM</strong><small id="whiteSub">Player 1 · Moves first</small></div></div><span style="font-size:11px;color:var(--muted)">Take turns on one device</span></div>
 </section>
 <aside class="side">
- <section class="side-card"><h2>⚔ MATCH CONTROL</h2><div class="turn-box"><div class="turn-icon" id="turnIcon">♔</div><div><strong id="turnText">White's turn</strong><span id="statusText">Select a piece to see its moves</span></div></div><div class="actions"><button class="primary" id="newGame">↻ New game</button><button id="undo">↶ Undo move</button></div><div class="result" id="result"><strong id="resultTitle">Checkmate!</strong><div id="resultText" style="font-size:12px;margin-top:4px"></div></div><p class="hint">Tap a piece, then tap a highlighted square. You can also tap a destination after selecting a piece. White moves first.</p></section>
+ <section class="side-card"><h2>⚔ MATCH CONTROL</h2><label for="botLevel" style="display:block;color:var(--muted);font-size:11px;font-weight:800;margin:0 0 7px;letter-spacing:.5px">OPPONENT</label><select id="botLevel" style="width:100%;padding:11px 12px;margin-bottom:12px;border-radius:8px;border:1px solid #56524c;background:#302e2b;color:var(--text);font:inherit;font-size:12px;font-weight:750"><option value="0">Two-player mode</option><option value="100">Beginner Bot · 100 ELO</option><option value="400">Rookie Bot · 400 ELO</option><option value="700">Club Bot · 700 ELO</option><option value="1000">Skilled Bot · 1000 ELO</option><option value="1500">Master Bot · 1500 ELO</option></select><div class="turn-box"><div class="turn-icon" id="turnIcon">♔</div><div><strong id="turnText">White's turn</strong><span id="statusText">Select a piece to see its moves</span></div></div><div class="actions"><button class="primary" id="newGame">↻ New game</button><button id="undo">↶ Undo move</button></div><div class="result" id="result"><strong id="resultTitle">Checkmate!</strong><div id="resultText" style="font-size:12px;margin-top:4px"></div></div><p class="hint">Tap a piece, then tap a highlighted square. You can also tap a destination after selecting a piece. White moves first.</p></section>
  <section class="side-card"><h2>📜 MOVE HISTORY</h2><div class="moves" id="moves"><div class="empty">Your match moves will appear here.</div></div></section>
 </aside>
 </main>
@@ -40,7 +40,7 @@ button{font:inherit;cursor:pointer;border:1px solid #56524c;border-radius:8px;pa
 (() => {
  const boardEl=document.getElementById('board'), movesEl=document.getElementById('moves');
  if(typeof Chess==='undefined'){document.getElementById('statusText').textContent='Could not load chess rules. Check your connection and refresh.';return;}
- const game=new Chess();let selected=null,legal=[],last=null;
+ const game=new Chess();let selected=null,legal=[],last=null,botLevel=0,botThinking=false;
  const glyph={wk:'♔',wq:'♕',wr:'♖',wb:'♗',wn:'♘',wp:'♙',bk:'♚',bq:'♛',br:'♜',bb:'♝',bn:'♞',bp:'♟'};
  const files='abcdefgh';
  function render(){
@@ -56,10 +56,13 @@ button{font:inherit;cursor:pointer;border:1px solid #56524c;border-radius:8px;pa
    if(p){const piece=document.createElement('span');piece.className='piece '+(p.color==='w'?'white':'black');piece.textContent=glyph[p.color+p.type];el.append(piece);}
    el.setAttribute('aria-label',sq+(p?' '+p.color+' '+p.type:' empty'));el.addEventListener('click',()=>tap(sq));boardEl.append(el);
   }
-  const white=game.turn()==='w';document.getElementById('turnPill').textContent=white?'WHITE TO MOVE':'BLACK TO MOVE';
-  document.getElementById('turnText').textContent=white?"White's turn":"Black's turn";
+  const white=game.turn()==='w';document.getElementById('turnPill').textContent=botThinking?'BOT THINKING…':white?'WHITE TO MOVE':'BLACK TO MOVE';
+  document.getElementById('blackName').textContent=botLevel?'BOT · '+botLevel+' ELO':'BLACK TEAM';
+  document.getElementById('blackSub').textContent=botLevel?'Computer opponent':'Player 2';
+  document.getElementById('whiteSub').textContent=botLevel?'You · Moves first':'Player 1 · Moves first';
+  document.getElementById('turnText').textContent=botThinking?'Bot is thinking…':white?"White's turn":botLevel?'Bot\'s turn':"Black's turn";
   document.getElementById('turnIcon').textContent=white?'♔':'♚';
-  let msg=game.in_check()?'CHECK! Protect your king.':'Select a piece to see its legal moves.';
+  let msg=botThinking?'The bot is choosing a move…':game.in_check()?'CHECK! Protect your king.':'Select a piece to see its legal moves.';
   if(game.game_over())msg=game.in_checkmate()?'Checkmate — game over.':game.in_stalemate()?'Stalemate — draw.':game.in_draw()?'Draw game.':'Game over.';
   document.getElementById('statusText').textContent=msg;
   document.getElementById('undo').disabled=game.history().length===0;
@@ -71,16 +74,67 @@ button{font:inherit;cursor:pointer;border:1px solid #56524c;border-radius:8px;pa
   renderMoves();
  }
  function tap(sq){
-  if(game.game_over())return;
+  if(game.game_over()||botThinking||(botLevel&&game.turn()==='b'))return;
   const p=game.get(sq);
   if(selected&&legal.some(m=>m.to===sq)){
    const move=game.move({from:selected,to:sq,promotion:'q'});
-   if(move){last={from:move.from,to:move.to};selected=null;legal=[];render();return;}
+   if(move){last={from:move.from,to:move.to};selected=null;legal=[];render();if(botLevel&&game.turn()==='b')scheduleBot();return;}
   }
   if(p&&p.color===game.turn()){
    selected=sq;legal=game.moves({square:sq,verbose:true});
   }else{selected=null;legal=[];}
   render();
+ }
+
+ const pieceValue={p:100,n:320,b:330,r:500,q:900,k:20000};
+ function evaluate(){
+  if(game.in_checkmate())return game.turn()==='b'?-100000:100000;
+  if(game.in_draw())return 0;
+  let score=0;
+  game.board().forEach(row=>row.forEach(p=>{if(p)score+=(p.color==='b'?1:-1)*pieceValue[p.type];}));
+  return score;
+ }
+ function search(depth,alpha,beta,maximizing){
+  if(depth===0||game.game_over())return evaluate();
+  const moves=game.moves({verbose:true});
+  if(maximizing){
+   let best=-Infinity;
+   for(const m of moves){game.move({from:m.from,to:m.to,promotion:'q'});const s=search(depth-1,alpha,beta,false);game.undo();best=Math.max(best,s);alpha=Math.max(alpha,best);if(beta<=alpha)break;}
+   return best;
+  }else{
+   let best=Infinity;
+   for(const m of moves){game.move({from:m.from,to:m.to,promotion:'q'});const s=search(depth-1,alpha,beta,true);game.undo();best=Math.min(best,s);beta=Math.min(beta,best);if(beta<=alpha)break;}
+   return best;
+  }
+ }
+ function chooseBotMove(){
+  const moves=game.moves({verbose:true});if(!moves.length)return null;
+  if(botLevel===100)return moves[Math.floor(Math.random()*moves.length)];
+  if(botLevel===400&&Math.random()<.72)return moves[Math.floor(Math.random()*moves.length)];
+  const depth=botLevel>=1500?3:botLevel>=1000?2:1;
+  let scored=moves.map(m=>{
+   game.move({from:m.from,to:m.to,promotion:'q'});
+   let score=search(depth-1,-Infinity,Infinity,game.turn()==='b');
+   if(m.captured)score+=botLevel>=700?pieceValue[m.captured]*.65:pieceValue[m.captured]*.25;
+   if(m.promotion)score+=700;
+   game.undo();
+   score+=(Math.random()-.5)*(botLevel>=1500?3:botLevel>=1000?25:150);
+   return {move:m,score};
+  });
+  scored.sort((a,b)=>b.score-a.score);
+  if(botLevel===400&&Math.random()<.55)return moves[Math.floor(Math.random()*moves.length)];
+  if(botLevel===700&&Math.random()<.25)return scored[Math.floor(Math.random()*Math.min(3,scored.length))].move;
+  return scored[0].move;
+ }
+ function scheduleBot(){
+  if(!botLevel||game.game_over()||game.turn()!=='b')return;
+  botThinking=true;render();
+  setTimeout(()=>{
+   if(!botLevel||game.game_over()||game.turn()!=='b'){botThinking=false;render();return;}
+   const move=chooseBotMove();
+   if(move){const made=game.move({from:move.from,to:move.to,promotion:'q'});if(made)last={from:made.from,to:made.to};}
+   botThinking=false;selected=null;legal=[];render();
+  },450);
  }
  function renderMoves(){
   const h=game.history();movesEl.innerHTML='';
@@ -93,8 +147,9 @@ button{font:inherit;cursor:pointer;border:1px solid #56524c;border-radius:8px;pa
   }
   movesEl.scrollTop=movesEl.scrollHeight;
  }
- document.getElementById('newGame').addEventListener('click',()=>{game.reset();selected=null;legal=[];last=null;render();});
- document.getElementById('undo').addEventListener('click',()=>{const m=game.undo();if(m){last=null;selected=null;legal=[];render();}});
+ document.getElementById('botLevel').addEventListener('change',e=>{botLevel=Number(e.target.value);botThinking=false;game.reset();selected=null;legal=[];last=null;render();});
+ document.getElementById('newGame').addEventListener('click',()=>{game.reset();selected=null;legal=[];last=null;botThinking=false;render();});
+ document.getElementById('undo').addEventListener('click',()=>{if(botThinking)return;const count=game.history().length; if(botLevel&&count>=2){game.undo();game.undo();}else game.undo();last=null;selected=null;legal=[];render();});
  render();
 })();
 </script>
