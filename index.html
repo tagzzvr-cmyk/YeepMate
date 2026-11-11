@@ -42,7 +42,15 @@ button{font:inherit;cursor:pointer;border:1px solid #56524c;border-radius:8px;pa
 @media(max-width:700px){header{padding:14px 16px}.status{display:none}.home-screen{padding:8px 15px 180px}.home-feature-row{grid-template-columns:1fr}.feature-main{min-height:220px}.feature-side{min-height:145px}.feature-content{max-width:65%}.feature-art{width:43%}.feature-king{font-size:130px}.feature-pawn{font-size:52px}.mode-grid{grid-template-columns:repeat(2,1fr)}.friends-row{grid-template-columns:repeat(3,minmax(130px,1fr));overflow-x:auto}.friend-tile{min-width:130px}.home-section{margin-top:25px}.recommend-avatar{width:65px;height:65px}.recommend-mark{font-size:26px;padding:0 4px}.home-playbar{padding:10px 15px 8px}}
 @media(max-width:390px){.feature-card{padding:19px}.feature-content h2{font-size:31px}.feature-content p{font-size:11px}.home-profile strong{font-size:15px}}
 
-</style>
+
+.live-queue{max-width:650px;margin:55px auto;padding:38px 30px;text-align:center;background:linear-gradient(145deg,#292724,#242320);border:1px solid #494640;border-radius:18px;box-shadow:0 18px 45px #0005}
+.queue-spinner{width:66px;height:66px;border:5px solid #45413c;border-top-color:#a3d160;border-radius:50%;margin:0 auto 22px;animation:yeep-spin 1s linear infinite}
+@keyframes yeep-spin{to{transform:rotate(360deg)}}
+.live-queue h2{font-size:28px;margin:0 0 9px}.live-queue p{color:#aaa69f;font-size:13px;line-height:1.6}.live-queue button{margin-top:15px;min-width:150px}
+.live-match-bar{grid-column:1/-1;display:none;align-items:center;justify-content:space-between;gap:12px;padding:13px 17px;background:#263821;border:1px solid #58783e;border-radius:11px}
+.live-match-bar strong,.live-match-bar small{display:block}.live-match-bar strong{font-size:13px}.live-match-bar small{font-size:11px;color:#c0d5ae;margin-top:4px}
+@media(max-width:600px){.live-queue{margin:25px 12px;padding:30px 20px}.live-match-bar{align-items:flex-start}}
+\n</style>
 </head>
 <body>
 <header><div class="brand"><div class="logo">♞</div><div><h1>YEЕPMATE</h1><p>CLASSIC CHESS</p></div></div><div class="status" id="modeStatus">♟ &nbsp; TWO-PLAYER CHESS</div></header>
@@ -68,7 +76,7 @@ button{font:inherit;cursor:pointer;border:1px solid #56524c;border-radius:8px;pa
  <section class="home-section">
   <div class="section-heading"><h3>Game Modes</h3><span>Choose one</span></div>
   <div class="mode-grid">
-   <button class="mode-card" data-level="0"><span class="mode-icon">♟</span><strong>Two Player</strong><small>Play with a friend</small></button>
+   <button class="mode-card" data-level="0"><span class="mode-icon">♟</span><strong>Two Player</strong><small>Play with a friend</small></button>\n   <button class="mode-card" data-level="live"><span class="mode-icon">🌐</span><strong>Play Online</strong><small>Live matchmaking</small></button>
    <button class="mode-card" data-level="100"><span class="mode-icon">🌱</span><strong>Beginner</strong><small>100 ELO · Easy</small></button>
    <button class="mode-card" data-level="400"><span class="mode-icon">⚔</span><strong>Rookie</strong><small>400 ELO · Casual</small></button>
    <button class="mode-card" data-level="700"><span class="mode-icon">♞</span><strong>Club</strong><small>700 ELO · Medium</small></button>
@@ -81,9 +89,15 @@ button{font:inherit;cursor:pointer;border:1px solid #56524c;border-radius:8px;pa
   <div class="friends-row"><div class="friend-tile"><span>♙</span><strong>Learn chess</strong><small>Practice legal moves</small></div><div class="friend-tile"><span>♘</span><strong>Challenge yourself</strong><small>Try a harder bot</small></div><div class="friend-tile"><span>♕</span><strong>Play again</strong><small>Start a fresh match</small></div></div>
  </section>
  <div class="home-playbar"><button class="primary home-play" id="startGame">Play <span>→</span></button><div class="home-nav"><span class="active"><b>♟</b>Home</span><span><b>♞</b>Play</span><span><b>♜</b>Learn</span><span><b>☰</b>More</span></div></div>
- <select id="welcomeOpponent" class="sr-select" aria-label="Choose opponent"><option value="0">Two Player</option><option value="100">Beginner Bot</option><option value="400">Rookie Bot</option><option value="700">Club Bot</option><option value="1000">Skilled Bot</option><option value="1500">Master Bot</option></select>
+ <select id="welcomeOpponent" class="sr-select" aria-label="Choose opponent"><option value="live">Play Online · Live match</option><option value="0">Two Player</option><option value="100">Beginner Bot</option><option value="400">Rookie Bot</option><option value="700">Club Bot</option><option value="1000">Skilled Bot</option><option value="1500">Master Bot</option></select>
+</section>
+<section id="liveQueueScreen" class="live-queue" style="display:none">
+ <div class="queue-spinner"></div><span class="mini-label">YEEPMATE LIVE</span>
+ <h2 id="queueText">Finding an opponent…</h2><p id="queueSub">Looking for another player.</p>
+ <button id="cancelQueue">Cancel search</button>
 </section>
 <main id="gameArea" style="display:none">
+ <div id="liveMatchBar" class="live-match-bar"><div><strong id="liveTitle">LIVE MATCH</strong><small id="liveSub">Connecting…</small></div><button id="leaveLive">Leave match</button></div>
 <section class="board-card">
  <div class="players"><div class="player"><div class="avatar black-avatar">♚</div><div><strong id="blackName">BLACK TEAM</strong><small id="blackSub">Player 2</small></div></div><div class="turn" id="turnPill">WHITE TO MOVE</div></div>
  <div class="board-wrap"><div class="board" id="board" aria-label="Chess board"></div></div>
@@ -96,7 +110,7 @@ button{font:inherit;cursor:pointer;border:1px solid #56524c;border-radius:8px;pa
 </aside>
 </main>
 <footer>YeepMate is a fan-made chess experience. Built for the Yeeps community. Not affiliated with the official Yeeps developers.</footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>\n<script src="supabase-config.js"></script>\n<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
 <script>
 (() => {
  const boardEl=document.getElementById('board'), movesEl=document.getElementById('moves');
@@ -136,11 +150,11 @@ button{font:inherit;cursor:pointer;border:1px solid #56524c;border-radius:8px;pa
   renderMoves();
  }
  function tap(sq){
-  if(game.game_over()||botThinking||(botLevel&&game.turn()==='b'))return;
+  if(game.game_over()||botThinking||(botLevel&&game.turn()==='b')||(window.yeepMateCanMove&&!window.yeepMateCanMove()))return;
   const p=game.get(sq);
   if(selected&&legal.some(m=>m.to===sq)){
    const move=game.move({from:selected,to:sq,promotion:'q'});
-   if(move){last={from:move.from,to:move.to};selected=null;legal=[];render();if(botLevel&&game.turn()==='b')scheduleBot();return;}
+   if(move){last={from:move.from,to:move.to};selected=null;legal=[];render();if(window.yeepMateOnLocalMove){const st=game.in_checkmate()?'checkmate':(game.in_draw()?'draw':'active');window.yeepMateOnLocalMove(game.fen(),game.history(),game.turn(),st);}if(botLevel&&game.turn()==='b')scheduleBot();return;}
   }
   if(p&&p.color===game.turn()){
    selected=sq;legal=game.moves({square:sq,verbose:true});
@@ -210,7 +224,7 @@ button{font:inherit;cursor:pointer;border:1px solid #56524c;border-radius:8px;pa
   movesEl.scrollTop=movesEl.scrollHeight;
  }
  document.querySelectorAll('.mode-card').forEach(card=>card.addEventListener('click',()=>{document.getElementById('welcomeOpponent').value=card.dataset.level;document.querySelectorAll('.mode-card').forEach(x=>x.classList.remove('chosen'));card.classList.add('chosen');}));
- document.getElementById('startGame').addEventListener('click',()=>{botLevel=Number(document.getElementById('welcomeOpponent').value);document.getElementById('botLevel').value=String(botLevel);game.reset();selected=null;legal=[];last=null;botThinking=false;document.getElementById('welcome').style.display='none';document.getElementById('gameArea').style.display='grid';render();});
+ document.getElementById('startGame').addEventListener('click',()=>{if(document.getElementById('welcomeOpponent').value==='live'){if(window.startYeepMateLive)window.startYeepMateLive();return;}botLevel=Number(document.getElementById('welcomeOpponent').value);document.getElementById('botLevel').value=String(botLevel);game.reset();selected=null;legal=[];last=null;botThinking=false;document.getElementById('welcome').style.display='none';document.getElementById('gameArea').style.display='grid';render();});
  document.getElementById('botLevel').addEventListener('change',e=>{botLevel=Number(e.target.value);botThinking=false;game.reset();selected=null;legal=[];last=null;render();});
  document.getElementById('newGame').addEventListener('click',()=>{game.reset();selected=null;legal=[];last=null;botThinking=false;render();});
  document.getElementById('undo').addEventListener('click',()=>{if(botThinking)return;const count=game.history().length; if(botLevel&&count>=2){game.undo();game.undo();}else game.undo();last=null;selected=null;legal=[];render();});
