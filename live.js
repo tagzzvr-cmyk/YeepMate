@@ -51,7 +51,7 @@
       opponentId = data.opponent_id;
       liveTitle.textContent = 'LIVE MATCH · ' + data.opponent_name;
       liveSub.textContent = 'You are playing ' + color.toUpperCase() + ' · ' + playerName;
-      window.yeepMateSetLivePlayer(color, playerId);
+      window.yeepMateSetLivePlayer(color, playerId, data.white_player_id, data.black_player_id);
       showMatch();
       await attachMatch();
     } else {
