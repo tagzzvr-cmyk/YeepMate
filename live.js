@@ -30,7 +30,7 @@
     clearInterval(queueTimer); clearInterval(pollTimer);
     queueTimer = pollTimer = null;
     if (channel) client.removeChannel(channel);
-    channel = null; matchId = opponentId = color = null; busy = false;
+    channel = null; matchId = opponentId = color = null; busy = false; window.yeepMateLivePlayerColor = null;
     liveBar.style.display = 'none'; queueScreen.style.display = 'none';
     main.style.display = 'none'; home.style.display = 'block';
     document.getElementById('botLevel').disabled = false;
