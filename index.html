@@ -18,11 +18,39 @@ main{max-width:1320px;margin:10px auto 50px;padding:0 28px;display:grid;grid-tem
 button{font:inherit;cursor:pointer;border:1px solid #56524c;border-radius:8px;padding:11px 13px;color:var(--text);background:#45413c;font-weight:750;font-size:12px;transition:.15s}button:hover{filter:brightness(1.15);transform:translateY(-1px)}button.primary{background:linear-gradient(180deg,#91c653,#76a943);color:#fff;border-color:#81b64c;box-shadow:0 2px 0 #527b2e}button:disabled{opacity:.4;cursor:not-allowed;transform:none}.moves{height:240px;overflow:auto;background:#302e2b;border:1px solid #494640;border-radius:9px;padding:8px}.move-row{display:grid;grid-template-columns:30px 1fr 1fr;gap:8px;padding:9px 7px;border-bottom:1px solid #45423d;font-size:12px}.move-row:last-child{border:0}.move-row span:first-child{color:var(--muted)}.move-row span:not(:first-child){font-weight:750}.empty{color:var(--muted);font-size:12px;padding:9px}.hint{font-size:11px;color:var(--muted);line-height:1.65;margin:13px 0 0}.result{display:none;padding:13px;border:1px solid #5d7e3c;background:#303c27;border-radius:9px;margin-top:12px}.result.show{display:block}.result strong{color:var(--accent)}footer{max-width:1320px;margin:0 auto;padding:0 22px 28px;color:#8e8980;font-size:11px;text-align:center}
 @media(max-width:900px){main{grid-template-columns:1fr;max-width:760px}.side{grid-template-columns:1fr 1fr}.side-card:first-child{grid-column:1/-1}}@media(max-width:560px){header{padding:16px 13px}.brand h1{font-size:21px}.status{font-size:9px;padding:8px}.brand p{font-size:9px}main{padding:0 9px;margin-top:8px}.board-card{padding:10px;border-radius:12px}.side{grid-template-columns:1fr}.side-card:first-child{grid-column:auto}.piece{font-size:clamp(25px,9vw,48px)}.board-wrap{border-width:3px}}
 
+
+.welcome{max-width:1120px;margin:36px auto 70px;padding:42px 48px;min-height:470px;display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:24px;position:relative;overflow:hidden;background:linear-gradient(135deg,#292724 0%,#242320 70%);border:1px solid #494640;border-radius:20px;box-shadow:0 20px 55px #0005}
+.welcome-top{position:absolute;top:25px;left:30px;display:flex;align-items:center;gap:10px}.welcome-mark{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:#81b64c;color:white;font-size:23px}.welcome-tag{font-size:10px;letter-spacing:2px;font-weight:900;color:#b9b5ad}
+.welcome-copy{padding-top:34px;position:relative;z-index:1}.eyebrow{font-size:10px;letter-spacing:2px;color:#a3d160;font-weight:900;margin:0 0 14px}.welcome h2{font-size:clamp(34px,5vw,55px);line-height:1.05;letter-spacing:-1.8px;margin:0 0 16px;font-weight:900}.welcome h2 span{color:#a3d160}.welcome-desc{max-width:470px;color:#b9b5ad;font-size:14px;line-height:1.8;margin:0 0 27px}.welcome label{display:block;color:#c9c5bd;font-size:10px;font-weight:900;letter-spacing:1.2px;margin-bottom:8px}.welcome select{width:min(100%,390px);padding:14px 15px;border:1px solid #56524c;border-radius:9px;background:#302e2b;color:#f2f0eb;font:inherit;font-size:13px;font-weight:750}.welcome-play{display:flex;align-items:center;justify-content:space-between;width:min(100%,390px);margin-top:12px;padding:15px 17px;font-size:14px}.welcome-play span{font-size:20px}.welcome-note{margin-top:16px;color:#918c83;font-size:11px}.welcome-art{height:330px;display:grid;place-items:center;position:relative}.art-glow{position:absolute;width:270px;height:270px;border-radius:50%;background:#81b64c18;box-shadow:0 0 100px #81b64c20}.art-piece{position:relative;font-family:Georgia,serif;font-size:clamp(170px,24vw,260px);line-height:1;color:#e7e5dd;text-shadow:0 12px 0 #62645b,0 25px 35px #0009;transform:translateY(-10px)}.art-caption{position:absolute;bottom:8px;font-size:10px;letter-spacing:4px;color:#9e9a90;font-weight:900}
+@media(max-width:760px){.welcome{margin:18px 12px 35px;padding:72px 24px 28px;grid-template-columns:1fr;gap:0;min-height:auto}.welcome-art{height:150px;grid-row:1}.art-piece{font-size:125px}.art-glow{width:145px;height:145px}.art-caption{bottom:0}.welcome-copy{padding-top:22px}.welcome h2{font-size:38px}}
+
 </style>
 </head>
 <body>
 <header><div class="brand"><div class="logo">♞</div><div><h1>YEЕPMATE</h1><p>CLASSIC CHESS</p></div></div><div class="status" id="modeStatus">♟ &nbsp; TWO-PLAYER CHESS</div></header>
-<main>
+
+<section id="welcome" class="welcome">
+ <div class="welcome-top"><span class="welcome-mark">♞</span><span class="welcome-tag">YEEPMATE CHESS</span></div>
+ <div class="welcome-copy">
+  <p class="eyebrow">YOUR NEXT MATCH STARTS HERE</p>
+  <h2>Welcome to <span>YeepMate.</span></h2>
+  <p class="welcome-desc">A classic game of chess, made for the Yeeps community. Pick an opponent, make your moves, and see if you can claim the win.</p>
+  <label for="welcomeOpponent">CHOOSE YOUR GAME</label>
+  <select id="welcomeOpponent">
+   <option value="0">Play with a friend · Two-player</option>
+   <option value="100">Beginner Bot · 100 ELO</option>
+   <option value="400">Rookie Bot · 400 ELO</option>
+   <option value="700">Club Bot · 700 ELO</option>
+   <option value="1000">Skilled Bot · 1000 ELO</option>
+   <option value="1500">Master Bot · 1500 ELO</option>
+  </select>
+  <button class="primary welcome-play" id="startGame">Start playing <span>→</span></button>
+  <div class="welcome-note">♟ White moves first · Standard chess rules</div>
+ </div>
+ <div class="welcome-art" aria-hidden="true"><div class="art-glow"></div><div class="art-piece">♞</div><div class="art-caption">MAKE YOUR MOVE</div></div>
+</section>
+
+<main id="gameArea" style="display:none">
 <section class="board-card">
  <div class="players"><div class="player"><div class="avatar black-avatar">♚</div><div><strong id="blackName">BLACK TEAM</strong><small id="blackSub">Player 2</small></div></div><div class="turn" id="turnPill">WHITE TO MOVE</div></div>
  <div class="board-wrap"><div class="board" id="board" aria-label="Chess board"></div></div>
@@ -148,6 +176,7 @@ button{font:inherit;cursor:pointer;border:1px solid #56524c;border-radius:8px;pa
   }
   movesEl.scrollTop=movesEl.scrollHeight;
  }
+ document.getElementById('startGame').addEventListener('click',()=>{botLevel=Number(document.getElementById('welcomeOpponent').value);document.getElementById('botLevel').value=String(botLevel);game.reset();selected=null;legal=[];last=null;botThinking=false;document.getElementById('welcome').style.display='none';document.getElementById('gameArea').style.display='grid';render();});
  document.getElementById('botLevel').addEventListener('change',e=>{botLevel=Number(e.target.value);botThinking=false;game.reset();selected=null;legal=[];last=null;render();});
  document.getElementById('newGame').addEventListener('click',()=>{game.reset();selected=null;legal=[];last=null;botThinking=false;render();});
  document.getElementById('undo').addEventListener('click',()=>{if(botThinking)return;const count=game.history().length; if(botLevel&&count>=2){game.undo();game.undo();}else game.undo();last=null;selected=null;legal=[];render();});
