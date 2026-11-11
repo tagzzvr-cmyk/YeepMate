@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111318"><title>YeepMate — Yeeps Chess</title>
+<style>
+:root{--bg:#101216;--panel:#191d24;--panel2:#222832;--line:#343c49;--text:#f4f6fa;--muted:#a5afbd;--gold:#e7c66a;--light:#e8e8e5;--dark:#51545b;--accent:#8bb8ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#242b36 0,#101216 58%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+header{max-width:1180px;margin:auto;padding:24px 22px 12px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{display:flex;align-items:center;gap:13px}.logo{width:48px;height:48px;border-radius:14px;background:linear-gradient(145deg,#f5f5f2,#9ca3af);color:#17191e;display:grid;place-items:center;font-size:29px;box-shadow:inset -5px -5px 0 #777d88,inset 3px 3px 0 white}.brand h1{font-size:25px;letter-spacing:1.5px;margin:0}.brand p{margin:3px 0 0;color:var(--muted);font-size:12px;letter-spacing:2px;text-transform:uppercase}.status{border:1px solid var(--line);background:#1b2028;padding:9px 13px;border-radius:99px;color:#cbd5e1;font-size:12px}
+main{max-width:1180px;margin:12px auto 48px;padding:0 22px;display:grid;grid-template-columns:minmax(300px,680px) minmax(260px,1fr);gap:22px;align-items:start}.board-card,.side-card{background:linear-gradient(160deg,#202630,#171b22);border:1px solid var(--line);border-radius:20px;box-shadow:0 18px 50px #0005}.board-card{padding:16px}.players{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 2px 13px}.player{display:flex;align-items:center;gap:10px;min-width:0}.avatar{width:35px;height:35px;border-radius:10px;display:grid;place-items:center;font-size:19px;background:#303743;border:1px solid #4b5563}.player strong{display:block;font-size:13px}.player small{color:var(--muted);font-size:11px}.turn{font-size:11px;color:var(--gold);border:1px solid #75643a;border-radius:99px;padding:6px 9px;white-space:nowrap}
+.board-wrap{padding:8px;background:#0b0d11;border:1px solid #424954;border-radius:12px;box-shadow:inset 0 0 0 2px #282e37}.board{display:grid;grid-template-columns:repeat(8,1fr);aspect-ratio:1;overflow:hidden;border-radius:5px}.square{position:relative;display:grid;place-items:center;min-width:0;cursor:pointer;user-select:none;aspect-ratio:1}.square.light{background:var(--light)}.square.dark{background:var(--dark)}.square.selected{box-shadow:inset 0 0 0 4px #e6c45f}.square.last{background-image:linear-gradient(#e7c66a55,#e7c66a55)}.square.legal:after{content:"";width:25%;height:25%;border-radius:50%;background:#1d252b66;position:absolute}.square.capture:after{content:"";position:absolute;inset:4px;border:4px solid #d9b65b;border-radius:50%}.piece{z-index:1;width:76%;height:76%;display:grid;place-items:center;border-radius:9px;font-family:Georgia,serif;font-size:clamp(25px,6vw,57px);line-height:1;position:relative;filter:drop-shadow(0 3px 1px #0006);transition:transform .12s}.piece.white{color:#fff;text-shadow:1px 2px 0 #8b929d,-1px -1px 0 #aab1bc,0 4px 0 #777e89}.piece.black{color:#20232a;text-shadow:1px 2px 0 #a5aab2,-1px -1px 0 #555b65,0 4px 0 #080a0e}.square:hover .piece{transform:translateY(-2px)}.coord{position:absolute;font-size:9px;font-weight:700;opacity:.75;bottom:3px;left:4px;z-index:2}.light .coord{color:#52545a}.dark .coord{color:#f0f0f0}.board-footer{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;padding:10px 2px 0}
+.side{display:grid;gap:14px}.side-card{padding:17px}.side-card h2{font-size:14px;margin:0 0 13px;letter-spacing:.5px}.turn-box{display:flex;align-items:center;gap:12px;background:#11151b;border:1px solid var(--line);padding:13px;border-radius:13px}.turn-icon{font-size:27px}.turn-box strong{display:block;font-size:14px}.turn-box span{font-size:11px;color:var(--muted)}.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}button{font:inherit;cursor:pointer;border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--text);background:#2a313c;font-weight:650;font-size:12px;transition:.15s}button:hover{filter:brightness(1.15);transform:translateY(-1px)}button.primary{background:#e6c66d;color:#17191e;border-color:#f0d88e}button:disabled{opacity:.4;cursor:not-allowed;transform:none}.moves{height:185px;overflow:auto;background:#11151b;border:1px solid var(--line);border-radius:11px;padding:8px}.move-row{display:grid;grid-template-columns:28px 1fr 1fr;gap:8px;padding:7px 6px;border-bottom:1px solid #29303a;font-size:12px}.move-row:last-child{border:0}.move-row span:first-child{color:var(--muted)}.move-row span:not(:first-child){font-weight:650}.empty{color:var(--muted);font-size:12px;padding:8px}.hint{font-size:11px;color:var(--muted);line-height:1.6;margin:11px 0 0}.result{display:none;padding:12px;border:1px solid #7b6939;background:#292416;border-radius:12px;margin-top:12px}.result.show{display:block}.result strong{color:var(--gold)}footer{max-width:1180px;margin:0 auto;padding:0 22px 28px;color:#77818f;font-size:11px;text-align:center}
+@media(max-width:850px){main{grid-template-columns:1fr;max-width:690px}.side{grid-template-columns:1fr 1fr}.side-card:first-child{grid-column:1/-1}}@media(max-width:520px){header{padding:17px 14px}.brand h1{font-size:21px}.status{font-size:10px}main{padding:0 10px;margin-top:8px}.board-card{padding:9px;border-radius:14px}.side{grid-template-columns:1fr}.side-card:first-child{grid-column:auto}.piece{font-size:clamp(24px,9vw,44px)}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="logo">♞</div><div><h1>YEЕPMATE</h1><p>Yeeps chess club</p></div></div><div class="status">♟ &nbsp; CLASSIC CHESS · 1V1</div></header>
+<main>
+<section class="board-card">
+ <div class="players"><div class="player"><div class="avatar">♔</div><div><strong>WHITE TEAM</strong><small>Player 1 · Moves first</small></div></div><div class="turn" id="turnPill">WHITE TO MOVE</div></div>
+ <div class="board-wrap"><div class="board" id="board" aria-label="Chess board"></div></div>
+ <div class="board-footer"><span> A  B  C  D  E  F  G  H</span><span>YEЕPMATE · V1</span></div>
+ <div class="players" style="margin:13px 2px 0"><div class="player"><div class="avatar">♚</div><div><strong>BLACK TEAM</strong><small>Player 2</small></div></div><span style="font-size:11px;color:var(--muted)">Take turns on one device</span></div>
+</section>
+<aside class="side">
+ <section class="side-card"><h2>⚔ MATCH CONTROL</h2><div class="turn-box"><div class="turn-icon" id="turnIcon">♔</div><div><strong id="turnText">White's turn</strong><span id="statusText">Select a piece to see its moves</span></div></div><div class="actions"><button class="primary" id="newGame">↻ New game</button><button id="undo">↶ Undo move</button></div><div class="result" id="result"><strong id="resultTitle">Checkmate!</strong><div id="resultText" style="font-size:12px;margin-top:4px"></div></div><p class="hint">Tap a piece, then tap a highlighted square. You can also tap a destination after selecting a piece. White moves first.</p></section>
+ <section class="side-card"><h2>📜 MOVE HISTORY</h2><div class="moves" id="moves"><div class="empty">Your match moves will appear here.</div></div></section>
+</aside>
+</main>
+<footer>YeepMate is a fan-made chess experience. Built for the Yeeps community. Not affiliated with the official Yeeps developers.</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+<script>
+(() => {
+ const boardEl=document.getElementById('board'), movesEl=document.getElementById('moves');
+ if(typeof Chess==='undefined'){document.getElementById('statusText').textContent='Could not load chess rules. Check your connection and refresh.';return;}
+ const game=new Chess();let selected=null,legal=[],last=null;
+ const glyph={wk:'♔',wq:'♕',wr:'♖',wb:'♗',wn:'♘',wp:'♙',bk:'♚',bq:'♛',br:'♜',bb:'♝',bn:'♞',bp:'♟'};
+ const files='abcdefgh';
+ function render(){
+  boardEl.innerHTML='';
+  for(let r=7;r>=0;r--)for(let c=0;c<8;c++){
+   const sq=files[c]+(r+1),p=game.get(sq),el=document.createElement('button');
+   el.type='button';el.className='square '+((r+c)%2===0?'light':'dark');
+   if(selected===sq)el.classList.add('selected');
+   if(last&&(last.from===sq||last.to===sq))el.classList.add('last');
+   const target=legal.find(m=>m.to===sq);if(target)el.classList.add(p?'capture':'legal');
+   if(c===0){const n=document.createElement('span');n.className='coord';n.textContent=r+1;el.append(n);}
+   if(r===0){const n=document.createElement('span');n.className='coord';n.style.left='auto';n.style.right='4px';n.textContent=files[c];el.append(n);}
+   if(p){const piece=document.createElement('span');piece.className='piece '+(p.color==='w'?'white':'black');piece.textContent=glyph[p.color+p.type];el.append(piece);}
+   el.setAttribute('aria-label',sq+(p?' '+p.color+' '+p.type:' empty'));el.addEventListener('click',()=>tap(sq));boardEl.append(el);
+  }
+  const white=game.turn()==='w';document.getElementById('turnPill').textContent=white?'WHITE TO MOVE':'BLACK TO MOVE';
+  document.getElementById('turnText').textContent=white?"White's turn":"Black's turn";
+  document.getElementById('turnIcon').textContent=white?'♔':'♚';
+  let msg=game.in_check()?'CHECK! Protect your king.':'Select a piece to see its legal moves.';
+  if(game.game_over())msg=game.in_checkmate()?'Checkmate — game over.':game.in_stalemate()?'Stalemate — draw.':game.in_draw()?'Draw game.':'Game over.';
+  document.getElementById('statusText').textContent=msg;
+  document.getElementById('undo').disabled=game.history().length===0;
+  const result=document.getElementById('result');result.classList.toggle('show',game.game_over());
+  if(game.game_over()){
+   document.getElementById('resultTitle').textContent=game.in_checkmate()?(white?'Black wins!':'White wins!'):'Match drawn!';
+   document.getElementById('resultText').textContent=game.in_checkmate()?'Checkmate. Great game!':game.in_stalemate()?'Stalemate. Neither player can make a legal move.':'The game ended in a draw.';
+  }
+  renderMoves();
+ }
+ function tap(sq){
+  if(game.game_over())return;
+  const p=game.get(sq);
+  if(selected&&legal.some(m=>m.to===sq)){
+   const move=game.move({from:selected,to:sq,promotion:'q'});
+   if(move){last={from:move.from,to:move.to};selected=null;legal=[];render();return;}
+  }
+  if(p&&p.color===game.turn()){
+   selected=sq;legal=game.moves({square:sq,verbose:true});
+  }else{selected=null;legal=[];}
+  render();
+ }
+ function renderMoves(){
+  const h=game.history();movesEl.innerHTML='';
+  if(!h.length){movesEl.innerHTML='<div class="empty">Your match moves will appear here.</div>';return;}
+  for(let i=0;i<h.length;i+=2){
+   const row=document.createElement('div');row.className='move-row';
+   const a=document.createElement('span'),b=document.createElement('span'),c=document.createElement('span');
+   a.textContent=(i/2+1)+'.';b.textContent=h[i];c.textContent=h[i+1]||'';
+   row.append(a,b,c);movesEl.append(row);
+  }
+  movesEl.scrollTop=movesEl.scrollHeight;
+ }
+ document.getElementById('newGame').addEventListener('click',()=>{game.reset();selected=null;legal=[];last=null;render();});
+ document.getElementById('undo').addEventListener('click',()=>{const m=game.undo();if(m){last=null;selected=null;legal=[];render();}});
+ render();
+})();
+</script>
+</body></html>
